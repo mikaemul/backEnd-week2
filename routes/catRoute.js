@@ -43,7 +43,21 @@ app.post('/cool-profile', cpUpload, function (req, res, next) {
   //  req.files['gallery'] -> Array
   //
   // req.body will contain the text fields, if there were any
+
 });
+
+// using diskstorage to give full control on storing files
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, '/tmp/my-uploads')
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.fieldname + '-' + Date.now())
+  }
+})
+
+var upload = multer({ storage: storage })
+
 
  */
 
