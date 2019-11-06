@@ -10,9 +10,14 @@ const user_list_get = (req, res) => {
 const user_get = (req, res) => {
   const user = users.filter((henkilo) =>{
     if(henkilo.id === req.params.id){
+      if(henkilo.password === req.params.password){
+        henkilo.password = "";
+      }
+
       return henkilo;
     }
   });
+
 
   res.json(user[0]);
 };
