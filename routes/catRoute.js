@@ -1,67 +1,38 @@
 'use strict';
-// catRoute
 const express = require('express');
-const router =express.Router();
-const catController = require('../controllers/catController');
+const router = express.Router();
 const multer = require('multer');
-const upload = multer({dest:'uploads/'});
+const upload = multer({dest: 'uploads/'});
+const catController = require('../controllers/catController');
 
 router.get('/', catController.cat_list_get);
+
 router.get('/:id', catController.cat_get);
 
-router.get('/', (req, res) => {
-  res.send('With this endpoint you can get cats.');
-});
-router.post('/', (req, res) => {
-  res.send('With this endpoint you can add cats');
-});
-router.put('/', (req, res) =>  {
-  res.send('With this endpoint you can edit cats.');
-});
-router.delete('/', (req, res) => {
-  res.send('With this endpoint you can delete cats.');
-});
-router.get('/:id', function (req, res) {
-  const id = req.params.id;
-  res.send('You reqested a cat whose id is ' + id)
-});
 router.post('/', upload.single('cat'), (req,res,next)=>{
-  console.log('cat post file',req.file);
-  res.send('With this endpoint you can add cats');
+  console.log('cat post file', req.file);
+  //tiedoston nimi bodyyn jos haluaa
+  req.body.filename = req.file.filename;
+  next();
 });
-/*app.post('/photos/upload', upload.array('photos', 12), function (req, res, next) {
-  // req.files is array of `photos` files
-  // req.body will contain the text fields, if there were any
-});
+router.post('/',catController.cat_create_post);
+router.put('/',catController.cat_update_put);
+router.delete('/:id',catController.cat_delete);
 
-var cpUpload = upload.fields([{ name: 'cat',maxCount: 1},{name: 'gallery, maxCount: 8}]);
-app.post('/cool-profile', cpUpload, function (req, res, next) {
-  // req.files is an object (String -> Array) where fieldname is the key, and the value is array of files
-  //
-  // e.g.
-  //  req.files['avatar'][0] -> File
-  //  req.files['gallery'] -> Array
-  //
-  // req.body will contain the text fields, if there were any
 
+/*router.put('/', upload.single('cat'),(req, res,next) => {
+  console.log('cat update file', req.file);
+  req.body.filename = req.file.filename;
+  next();
 });
 
-// using diskstorage to give full control on storing files
-var storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, '/tmp/my-uploads')
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.fieldname + '-' + Date.now())
-  }
-})
 
-var upload = multer({ storage: storage })
-
+router.delete('/', upload.single('cat'),(req, res,next) => {
+  console.log('cat delete file',req.file);
+  next();
+});
 
  */
-
-
 
 
 module.exports = router;
