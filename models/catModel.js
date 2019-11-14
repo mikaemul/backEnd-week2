@@ -4,7 +4,7 @@ const promisePool = pool.promise();
 
 const getAllCats = async () => {
   try {
-    const [rows] = await promisePool.execute('SELECT * FROM wop_cat;');
+    const [rows] = await promisePool.execute('SELECT wop_cat.*,wop_user.name as "ownername" FROM wop_cat inner join wop_user on wop_user.user_id = wop_cat.owner order by wop_cat.cat_id;');
     return rows;
   } catch (e) {
     console.log('error', e.message);
@@ -34,18 +34,18 @@ const addCat = async (params) => {
 const updateCat = async (params) => {
   try {
     const [rows] = await promisePool.execute(
-        'UPDATE `wop_cat` SET `name`= ?,`age`= ?, `weight`= ?,`owner`= ?,`cat_id`= ?;',
+        'UPDATE `wop_cat` SET `name`= ?,`age`= ?, `weight`= ?,`owner`= ? WHERE cat_id = ?;',
         params);
     return rows;
   } catch (e) {
     console.log('error', e.message);
   }
 };
-const deleteCat = async (id) => {
+const deleteCat = async (params) => {
   try {
     const [rows] = await promisePool.execute(
         'DELETE FROM wop_cat WHERE `cat_id` = ?;',
-        [id]);
+        params);
     return rows;
   } catch (e) {
     console.log('error', e.message);
