@@ -33,10 +33,22 @@ const addUser = async (params) => {
     console.log('error', e.message);
   }
 };
+const getUserLogin = async (params) => {
+  try {
+    console.log(params);
+    const [rows] = await promisePool.execute(
+        'SELECT user_id, name, email FROM wop_user WHERE email = ? AND password = ?;',
+        params);
+    return rows;
+  } catch (e) {
+    console.log('error', e.message);
+  }
+};
 
 
 module.exports = {
   getAllUsers,
   getUser,
   addUser,
+  getUserLogin,
 };

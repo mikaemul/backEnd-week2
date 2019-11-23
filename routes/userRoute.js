@@ -6,7 +6,6 @@ const upload = multer({dest: 'uploads/'});
 const userController = require('../controllers/userController');
 const { body,sanitizeBody  } = require('express-validator');
 
-
 router.get('/',userController.user_list_get);
 
 router.get('/:id', userController.user_get);
