@@ -32,7 +32,7 @@ passport.use(new Strategy(
 
       //find the user in db if needed. This functionality may be omitted if you store everything you'll need in JWT payload.
       try{
-        const [user] = await userModel.getUser(jwtPayload.user.id);
+        const [user] = await userModel.getUser(jwtPayload.user_id);
         if(user === undefined)
           return done(null,false);
 
@@ -42,7 +42,7 @@ passport.use(new Strategy(
         }
       },
 
-      return userModel.getUser(jwtPayload.user.id)
+      return userModel.getUser(jwtPayload.user_id)
       .then(user => {
         return done(null, {...user[0]});
       })
@@ -52,6 +52,8 @@ passport.use(new Strategy(
 
 
     }
+
+
 
 
 ));
@@ -65,14 +67,16 @@ passport.use(new JWTStrategy({
      (jwtPayload, done) => {
 
       //find the user in db if needed. This functionality may be omitted if you store everything you'll need in JWT payload.
-      return userModel.getUserLogin(jwtPayload.user.id)
+       return userModel.getUserLogin([jwtPayload.user_id])
       .then(user => {
-        return done(null, {...user[0]});
+        return done(null, {...user});
       }).catch(err => {
         return done(err);
       });
     }
 
     ));
+
+
 
 module.exports = passport;
