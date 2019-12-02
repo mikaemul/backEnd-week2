@@ -13,6 +13,10 @@ const userRoute = require('./routes/userRoute');
 const authRoute = require('./routes/authRoute.js');
 const sslkey  = fs.readFileSync('/etc/pki/tls/private/ca.key');
 const sslcert = fs.readFileSync('/etc/pki/tls/certs/ca.crt');
+const options = {
+  key: sslkey,
+  cert: sslcert
+};
 
 
 app.use(cors());
@@ -43,4 +47,4 @@ app.get('/logout', function(req, res){
 
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
-https.createServer(options,app).listen(httpsPort);//https traffic
+https.createServer(options, app).listen(httpsPort); //https traffic
